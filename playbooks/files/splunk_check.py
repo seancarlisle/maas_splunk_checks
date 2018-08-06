@@ -81,7 +81,7 @@ def main():
     args = parse_args()
     metrics = check_splunk_forwarder(container_name=args.container)
 
-    metric_bool("splunk_status", metrics.get("splunk_status"), m_name="splunk_check")
+    metric_bool("splunk_active", metrics.get("splunk_active"), m_name="splunk_check")
     metric_bool("splunk_connected", metrics.get("splunk_connected"), m_name="splunk_check")
     metric_bool("splunk_shipping", metrics.get("splunk_shipping"), m_name="splunk_check")
 
