@@ -38,7 +38,7 @@ def check_splunk_forwarder(container_name=''):
                   metrics['splunk_active'] = True
 
             # Is the Splunk forwarder connected to the home base?
-            if cont.attach_wait(lxc.attach_run_command, ['netstat', '-ntap'], stdout=tmpfile) > -1:
+            if cont.attach_wait(lxc.attach_run_command, ['netstat', '-ntap'], stderr=stdout, stdout=tmpfile) > -1:
                tmpfile.seek(0)
                output = tmpfile.read()
 
@@ -47,7 +47,7 @@ def check_splunk_forwarder(container_name=''):
                   metrics['splunk_connected'] = True
 
             # Are logs actively being shipped to the log file Splunk monitors?
-            if cont.attach_wait(lxc.attach_run_command, ['stat', '-c', '%y', '/var/backup/rsyslog/rsyslog-aggregate.log'], stdout=tmpfile) > -1:
+            if cont.attach_wait(lxc.attach_run_command, ['stat', '-c', '%y', '/var/backup/rsyslog/rsyslog-aggregate.log'], stderr=stdout, stdout=tmpfile) > -1:
                tmpfile.seek(0)
                output = tmpfile.read()
 
