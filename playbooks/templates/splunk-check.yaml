@@ -16,6 +16,7 @@ alarms:
             if (metric["splunk_active"] != 1) {
                 return new AlarmStatus(CRITICAL, "The Splunk forwarder is not running. Try to restart the forwarder with service splunk restart.");
             }
+            return new AlarmStatus(OK, "The Splunk forwarder is running.");
     splunk_connection_status :
         label                   : splunk_connection_status--{{ inventory_hostname }}
         notification_plan_id    : "npManaged"
@@ -25,6 +26,7 @@ alarms:
             if (metric["splunk_connected"] != 1) {
                 return new AlarmStatus(CRITICAL, "The Splunk forwarder is not connected to home base. Please investigate!");
             }
+            return new AlarmStatus(OK, "The Splunk forwarder is connected to home base.");
     splunk_target_log_status :
         label                   : splunk_target_log_status--{{ inventory_hostname }}
         notification_plan_id    : "npManaged"
@@ -34,3 +36,4 @@ alarms:
             if (metric["splunk_shipping"] != 1) {
                 return new AlarmStatus(CRITICAL, "The log file Splunk monitors is not updating. Please investigate rsyslog.");
             }
+            return new AlarmStatus(OK, "The log file Splunk monitors is updating correctly.");
