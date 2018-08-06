@@ -5,7 +5,7 @@ timeout           : "{{ splunk_check_timeout | default(30) }}"
 disabled          : "false"
 details     :
     file    : run_plugin_in_venv.sh
-    args    : ["/usr/lib/rackspace-monitoring-agent/plugins/splunk_check.py --container {{ groups[rsyslog] }}"]
+    args    : ["/usr/lib/rackspace-monitoring-agent/plugins/splunk_check.py", "--container", "{{ groups[rsyslog] }}"]
 alarms:
     splunk_status :
         label                   : splunk_check--{{ inventory_hostname }}
