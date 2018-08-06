@@ -37,4 +37,3 @@
   vars:
     splunk_check_period: 60
     splunk_check_timeout: 30
-    splunk_check_target_file: "/var/backup/rsyslog/rsyslog-aggregate.log"
