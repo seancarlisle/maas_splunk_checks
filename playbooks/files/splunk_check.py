@@ -14,7 +14,7 @@ from maas_common import print_output
 from maas_common import status_ok
 from maas_common import status
 from maas_common import status_err
-from maas_common import MaasException
+from maas_common import MaaSException
 
 # Check the status of log shipping to the Splunk home base
 def check_splunk_forwarder(container_name=''):
