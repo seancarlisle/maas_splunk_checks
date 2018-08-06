@@ -14,6 +14,7 @@ from maas_common import print_output
 from maas_common import status_ok
 from maas_common import status
 from maas_common import status_err
+from maas_common import MaasException
 
 # Check the status of log shipping to the Splunk home base
 def check_splunk_forwarder(container_name=''):
@@ -24,7 +25,7 @@ def check_splunk_forwarder(container_name=''):
       if not (cont.init_pid > 1 and
               cont.running and
               cont.state == "RUNNING"):
-          raise maas_common.MaaSException('Container %s not in running state' %
+          raise MaaSException('Container %s not in running state' %
                                            cont.name)
 
       try:
@@ -59,9 +60,9 @@ def check_splunk_forwarder(container_name=''):
                    metrics['splunk_shipping'] = True
                else:
                  msg = ('The aggregate log file could not be found.')
-                 raise maas_common.MaasException(msg)
+                 raise MaasException(msg)
 
-      except maas_common.MaaSException as e:
+      except MaaSException as e:
         status_err(str(e), force_print=True, m_name="splunk_check")
 
       finally:
@@ -85,7 +86,7 @@ def main():
     metric_bool("splunk_connected", metrics.get("splunk_connected"), m_name="splunk_check")
     metric_bool("splunk_shipping", metrics.get("splunk_shipping"), m_name="splunk_check")
 
-  except maas_common.MaaSException as e:
+  except MaaSException as e:
      status_err(str(e), force_print=True, m_name="splunk_check")
 
 if __name__ == '__main__':
