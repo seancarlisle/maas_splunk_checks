@@ -54,9 +54,7 @@ def check_splunk_forwarder(container_name=''):
                modTimestamp = re.search('([0-9]{4}-[0-9]{2}-[0-9]{2}) ([0-9]{2}:[0-9]{2})', output)
                currTime = str(datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M'))
 
-               print "modTimestamp: " + modTimestamp.group(0)
-               print "currTime: " + currTime
-               if not modTimestamp is None:
+               if modTimestamp is not None:
                  if currTime == modTimestamp.group(0):
                    metrics['splunk_shipping'] = True
                else:
@@ -80,6 +78,8 @@ def main():
   try:
     args = parse_args()
     metrics = check_splunk_forwarder(container_name=args.container)
+
+    status_ok(m_name="splunk_check")
 
     metric_bool("splunk_active", metrics.get("splunk_active"), m_name="splunk_check")
     metric_bool("splunk_connected", metrics.get("splunk_connected"), m_name="splunk_check")
