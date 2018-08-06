@@ -1,0 +1,25 @@
+type              : agent.plugin
+label             : "splunk_check--{{ inventory_hostname }}"
+period            : "{{ splunk_check_period | default(60) }}"
+timeout           : "{{ splunk_check_timeout | default(30) }}"
+disabled          : "false"
+details     :
+    file    : run_plugin_in_venv.sh
+    args    : ["/usr/lib/rackspace-monitoring-agent/plugins/splunk_check.py --container {{ groups[rsyslog] }}"]
+alarms:
+    splunk_status :
+        label                   : splunk_check--{{ inventory_hostname }}
+        notification_plan_id    : "npManaged"
+        disabled                : false
+        criteria                : |
+            :set consecutiveCount=3
+            if (metric["splunk_active"] != 1) {
+                return new AlarmStatus(CRITICAL, "The Splunk forwarder is not running. Try to restart the forwarder with service splunk restart.");
+            }
+            else if (metric["splunk_connected"] != 1) {
+                return new AlarmStatus(CRITICAL, "The Splunk forwarder is not connected to home base. Please investigate!");
+            else if (metric["splunk_shipping"] != 1) {
+                return new AlarmStatus(CRITICAL, "The file {{ splunk_check_target_file }} is not updating. Please investigate rsyslog.");
+            }
+            return new AlarmStatus(OK, "The Splunk forwarder is working correctly");
+
