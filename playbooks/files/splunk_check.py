@@ -30,7 +30,7 @@ def check_splunk_forwarder(container_name=''):
       try:
          with tempfile.TemporaryFile() as tmpfile:
             # Is Splunk running?
-            if cont.attach_wait(lxc.attach_run_command, ['service', 'splunk', 'status'], stdout=tmpfile) > -1:
+            if cont.attach_wait(lxc.attach_run_command, ['service', 'splunk', 'status'], stderr=stdout, stdout=tmpfile) > -1:
                tmpfile.seek(0)
                output = tmpfile.read()
 
