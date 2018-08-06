@@ -5,9 +5,9 @@ import datetime
 import argparse
 import maas_common
 
-def check_splunk_forwarder(container_name='', checkInterval=60):
+def check_splunk_forwarder(container_name=''):
 
-      metrics = {'splunkd_active' : False, 'splunkd_connected' : False, 'splunkd_shipping' : False}
+      metrics = {'splunk_active' : False, 'splunk_connected' : False, 'splunk_shipping' : False}
       cont = lxc.Container(container_name)
 
       if not (cont.init_pid > 1 and
@@ -24,7 +24,7 @@ def check_splunk_forwarder(container_name='', checkInterval=60):
                output = tmpfile.read()
 
                if "splunkd is running" in output:
-                  metrics['splunkd_active'] = True
+                  metrics['splunk_active'] = True
 
             # Is the Splunk forwarder connected to the home base?
             if cont.attach_wait(lxc.attach_run_command, ['netstat', '-ntap'], stdout=tmpfile) > -1:
@@ -33,7 +33,7 @@ def check_splunk_forwarder(container_name='', checkInterval=60):
 
                result = re.search('ESTABLISHED ([0-9]){1,6}/splunkd', output)
                if result.group(0):
-                  metrics['splunkd_connected'] = True
+                  metrics['splunk_connected'] = True
 
             # Are logs actively being shipped to the log file Splunk monitors?
             if cont.attach_wait(lxc.attach_run_command, ['stat', '-c', '%y', '/var/backup/rsyslog/rsyslog-aggregate.log'], stdout=tmpfile) > -1:
@@ -47,7 +47,7 @@ def check_splunk_forwarder(container_name='', checkInterval=60):
                print "currTime: " + currTime
                if not modTimestamp is None:
                  if currTime == modTimestamp.group(0):
-                   metrics['splunkd_shipping'] = True
+                   metrics['splunk_shipping'] = True
                else:
                  msg = ('The aggregate log file could not be found.')
                  raise MaasException(msg)
@@ -69,8 +69,6 @@ def main():
   try:
     args = parse_args()
     metrics = check_splunk_forwarder(container_name=args.container)
-    if metrics.get("splunkd_shipping") and metrics.get("splunkd_connected") and metrics.get("splunkd_active"):
-       status_ok(message="Log shipping functioning correctly", force_print=True)
   except maas_common.MaaSException as e:
      maas_common.status_err(str(e), force_print=True, m_name="splunk_check")
 
