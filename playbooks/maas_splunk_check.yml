@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy maas check for the Splunk forwarder
-  hosts: logging
+  hosts: log_hosts
   tasks:
     - name: Copy splunk_check.py to the logging node
       copy:
