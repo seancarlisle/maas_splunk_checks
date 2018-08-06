@@ -18,8 +18,9 @@ alarms:
             }
             else if (metric["splunk_connected"] != 1) {
                 return new AlarmStatus(CRITICAL, "The Splunk forwarder is not connected to home base. Please investigate!");
+            }
             else if (metric["splunk_shipping"] != 1) {
-                return new AlarmStatus(CRITICAL, "The file {{ splunk_check_target_file }} is not updating. Please investigate rsyslog.");
+                return new AlarmStatus(CRITICAL, "The log file Splunk monitors is not updating. Please investigate rsyslog.");
             }
             return new AlarmStatus(OK, "The Splunk forwarder is working correctly");
 
