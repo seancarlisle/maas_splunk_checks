@@ -65,6 +65,9 @@ def check_splunk_forwarder(container_name=''):
       except MaaSException as e:
         status_err(str(e), force_print=True, m_name="splunk_check")
 
+      except Exception as e:
+        status_err(str(e), force_print=True, m_name="splunk_check")
+
       finally:
         return metrics
 
