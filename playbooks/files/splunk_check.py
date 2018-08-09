@@ -44,7 +44,7 @@ def check_splunk_forwarder(container_name=''):
                output = tmpfile.read()
 
                result = re.search('ESTABLISHED ([0-9]){1,6}/splunkd', output)
-               if result.group(0):
+               if result is not None:
                   metrics['splunk_connected'] = True
 
             # Are logs actively being shipped to the log file Splunk monitors?
