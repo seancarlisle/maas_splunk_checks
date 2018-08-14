@@ -14,7 +14,7 @@ alarms:
         criteria                : |
             :set consecutiveCount=3
             if (metric["splunk_active"] != 1) {
-                return new AlarmStatus(CRITICAL, "The Splunk forwarder is not running. Try to restart the forwarder with service splunk restart.");
+                return new AlarmStatus(CRITICAL, "The Splunk forwarder is not running. Try to restart the forwarder with 'service splunk restart'.");
             }
             return new AlarmStatus(OK, "The Splunk forwarder is running.");
     splunk_connection_status :
